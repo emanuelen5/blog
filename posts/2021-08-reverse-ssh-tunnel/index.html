@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Emaus: Reverse SSH...</title>
+		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/default.css">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	</head>
+	<body class="d-flex flex-column min-vh-100"><nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-brand">Emaus</div>
+    <div class="" id="navbarNav">
+        <ul class="navbar-nav">
+            
+            <a class="nav-link " href="/">Home</a>
+            <a class="nav-link " href="/posts/">Posts</a>
+            <a class="nav-link " href="/tips/">Tips</a>
+        </ul>
+    </div>
+</nav><div class="container px-sm-3 px-1">
+			<h1 class="display-8">
+        
+	
+	Reverse SSH tunnel for monitoring servers
+
+      </h1>
+
+<p class="lead">How to set up a reverse SSH tunnel to external servers without risking security.
+</p>
+
+
+<p class="lead">Published:    2021-08-16 <br/>
+Last updated: 2021-08-16 23:00</p>
+
+<div class="row no-gutters justify-content-center justify-content-md-start"><div class="col-auto"><div class="badge badge-dark tag mini-margin">linux</div></div><div class="col-auto"><div class="badge badge-dark tag mini-margin">ssh</div></div><div class="col-auto"><div class="badge badge-info category mini-margin">guide</div></div></div><hr class="my-4">
+
+<div class="d-flex jumbotron-post-text w-100">
+	<div class="w-50 previous-post post-navigation"><a href="/posts/2021-09-installing-homeassistant-docker/" rel="next" title="Installing Homeassistant in a Docker container (e.g. on Raspberry Pi)">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2021-06-custom-python-setup-commands/" rel="previous" title="Custom Python setuptools commands">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+</div>
+
+<section class="my-4">
+	<p>A reverse SSH tunnel can be used for securely keeping a connection open to a remote server, even if it does not have a fixed IP. The only requirement is that you have a separate server that you administer which you know the IP of, or which has a domain that points to it.</p><h3 id="schematic-figure">
+        <a href="#schematic-figure" class="anchor"><span>>>></span></a>Schematic figure:
+      </h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          Remote server           Local server
+          Unknown IP              Reachable at domain example.com
+          -------------           ------------
+
+AutoSSH, reverse tunnel
+that keps open to local  =======&gt; SSH daemon
+server (example.com), 
+and restarts if it fails
+
+                                  On demand SSH to remote server
+              Connected! &lt;==SSH== by connecting to local server,
+                                  and connecting through the tunnel
+</code></pre></div></div><h1 id="on-the-local-server">
+        <a href="#on-the-local-server" class="anchor"><span>></span></a>On the local server
+      </h1>
+<p>Begin by setting up the local server. It will need a dedicated user that only is allowed to open tunnels on a specific port, and also the public key that shall be allowed to connect to the server.</p><h2 id="ssh-daemon-config">
+        <a href="#ssh-daemon-config" class="anchor"><span>>></span></a>SSH daemon config
+      </h2>
+<ol>
+  <li>First create a separate user called e.g. <em>tunnel-user</em></li>
+  <li>Configure the SSH daemon to only allow <em>that</em> user to create reverse SSH tunnels on specific ports (4567 in the example below):</li>
+</ol>
+
+<pre><code class="language-ssh-config">## /etc/ssh/sshd_config
+
+Match User tunnel-user
+        AllowAgentForwarding no
+        PasswordAuthentication no
+        X11Forwarding no
+        GatewayPorts no
+        PermitTunnel no
+        ForceCommand echo 'This account can only be used for reverse-ssh'
+        AllowStreamLocalForwarding no
+        AllowTcpForwarding remote
+        PermitOpen localhost:4567
+        # Don't think these make any difference
+        ClientAliveInterval 10
+        ClientAliveCountMax 300
+</code></pre><h2 id="public-key">
+        <a href="#public-key" class="anchor"><span>>></span></a>Public key
+      </h2>
+<p>Add a public key that shall be allowed to connect to the local server. This assumes that you have already copied the key to the server to a file <em>remote_key.id_rsa.pub</em>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># On the local server, if it is already copied to the file system</span>
+<span class="o">(</span><span class="nb">local</span><span class="o">)</span> <span class="nv">$ </span>su tunnel-user
+<span class="o">(</span><span class="nb">local</span><span class="o">)</span> <span class="nv">$ </span><span class="nb">cat </span>remote_key.id_rsa.pub <span class="o">&gt;&gt;</span> ~/.ssh/authorized_keys
+</code></pre></div></div><h2 id="ssh-configuration">
+        <a href="#ssh-configuration" class="anchor"><span>>></span></a>SSH configuration
+      </h2>
+<p>This is just a nice feature that I like to use. Instead of setting all of the parameters in the SSH command, they can be specified as targets, called <em>Hosts</em>. Each target has a combination of parameters, like what <code class="language-plaintext highlighter-rouge">ip:port</code> to connect to, what SSH key to use, etc.</p>
+
+<pre><code class="language-ssh-config">## ~/.ssh/config
+
+# The name of the target becomes my-tunnel
+Host my-tunnel
+    # What to connect to (domain and username)
+    Hostname      example.com
+    User          tunnel-user
+    # The external port on the local server
+    Port          22
+
+    # The SSH key that has been added to the local server
+    IdentityFile  ~/.ssh/reverse_ssh_example.id_rsa
+    # Do not try password authentication
+    IdentitiesOnly yes
+
+    # The port on the local server that is used for initiating the connection (4567), and
+    # the destination when connecting to that port (localhost:22)
+    RemoteForward 4567 localhost:22
+
+    # TTY is disabled for the port
+    RequestTTY no
+
+    # To make sure that it restarts within reasonable time
+    ServerAliveInterval 60
+    ServerAliveCountMax 30
+
+    # This makes sure that AutoSSH can retry the connection
+    ExitOnForwardFailure yes
+</code></pre>
+
+<p>One can then connect to the target with all of the preconfigured settings, by just specifying the name:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>remote<span class="o">)</span> <span class="nv">$ </span>ssh my-tunnel
+<span class="c"># Equivalent to</span>
+<span class="o">(</span>remote<span class="o">)</span> <span class="nv">$ </span>ssh <span class="nt">-p</span> 22 <span class="nt">-i</span> ~/.ssh/reverse_ssh_example.id_rsa <span class="nt">-o</span> <span class="nv">IdentitiesOnly</span><span class="o">=</span><span class="nb">yes</span> <span class="nt">-R</span> 4567:localhost:22 <span class="nt">-T</span> <span class="nt">-o</span> <span class="nv">ServerAliveInterval</span><span class="o">=</span>60 <span class="nt">-o</span> ServerAliveCountMax 30 <span class="nt">-o</span> <span class="nv">ExitOnForwardFailure</span><span class="o">=</span><span class="nb">yes </span>tunnel-user@example.com
+</code></pre></div></div><h1 id="on-the-remote-server">
+        <a href="#on-the-remote-server" class="anchor"><span>></span></a>On the remote server
+      </h1><h2 id="service-that-starts-the-reverse-ssh-tunnel">
+        <a href="#service-that-starts-the-reverse-ssh-tunnel" class="anchor"><span>>></span></a>Service that starts the reverse SSH tunnel
+      </h2>
+<p>Create a service on the remote server that continously tries to connects to your local server, using the helper program <em>autossh</em>.</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">## /etc/systemd/system/autossh.service
+</span>
+<span class="nn">[Unit]</span>
+<span class="py">Description</span><span class="p">=</span><span class="s">AutoSSH tunnel service for maintenance, connection according to .ssh/config</span>
+<span class="py">After</span><span class="p">=</span><span class="s">network-online.target</span>
+
+<span class="nn">[Service]</span>
+<span class="c"># Choose a user that exists. Doesn't matter much
+</span><span class="py">User</span><span class="p">=</span><span class="s">pi</span>
+<span class="py">Type</span><span class="p">=</span><span class="s">simple</span>
+<span class="py">Restart</span><span class="p">=</span><span class="s">always</span>
+<span class="py">Environment</span><span class="p">=</span><span class="s">"AUTOSSH_GATETIME=0"</span>
+<span class="py">ExecStart</span><span class="p">=</span><span class="s">/usr/bin/autossh -M 0 -N my-tunnel</span>
+
+<span class="nn">[Install]</span>
+<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+</code></pre></div></div><h1 id="use-the-reverse-ssh-tunnel">
+        <a href="#use-the-reverse-ssh-tunnel" class="anchor"><span>></span></a>Use the reverse SSH tunnel
+      </h1>
+<p>To connect to the remote server, you can now issue the following command on the local server:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span><span class="nb">local</span><span class="o">)</span> <span class="nv">$ </span>ssh <span class="nt">-p</span> 4567 localhost
+</code></pre></div></div>
+
+<p>which will connect through the tunnel to the remote server, and prompt for user, password, and key.</p>
+
+</section>
+
+<script src="/assets/js/post.js"></script>
+
+		</div>
+    </body>
+	<!-- Make sure that footer is at bottom of page -->
+	<div class="wrapper flex-grow-1"></div><div class="container d-flex jumbotron-post-text w-100">
+            <div class="w-50 previous-post post-navigation"><a href="/posts/2021-09-installing-homeassistant-docker/" rel="next" title="Installing Homeassistant in a Docker container (e.g. on Raspberry Pi)">
+		<img src="/assets/images/arrow-left.svg" alt="Left arrow">
+		newer
+	</a></div>
+<div class="w-50 next-post post-navigation"><a href="/posts/2021-06-custom-python-setup-commands/" rel="previous" title="Custom Python setuptools commands">
+		older
+		<img src="/assets/images/arrow-right.svg" alt="Right arrow">
+	</a></div>
+
+        </div><footer>
+        <div class="container-fluid navbar-light bg-light py-2">
+    <div class="row">
+        <div class="col-lg-auto col-12 navbar-brand text-center">&copy; 2021 Erasmus Cedernaes</div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5/emanuelen5.github.io//tree/blog/site/_posts/2021-02-12-reverse-ssh-tunnel.md">
+                <div class="align-middle fade-image">
+                    <img alt="Source code icon" class="filter-color-inactive-link" style="filter: grayscale(100%) brightness(0)" src="/assets/images/code.svg"/>
+                    <img alt="Source code icon" class="filter-color-active-link" src="/assets/images/code.svg"/>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Source</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://github.com/emanuelen5">
+                <div class="align-middle fade-image">
+                    <img alt="Github icon" class="filter-color-inactive-link invert" style="filter: grayscale(100%) invert(100%) contrast(1.5)" src="/assets/images/github_icon.svg"/>
+                    <img alt="Github icon" class="filter-color-active-link invert" src="/assets/images/github_icon.svg"/>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Github profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="mailto:erasmus.cedernaes@gmail.com">
+                <div class="align-middle fade-image">
+                    <img alt="Email icon" class="filter-color-inactive-link invert" src="/assets/images/email.svg"/>
+                    <img alt="Email icon" style="filter: grayscale(100%) invert(100%)" class="filter-color-active-link invert" src="/assets/images/email.svg"/>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Contact</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="https://www.linkedin.com/in/erasmus-cedernaes/">
+                <div class="align-middle fade-image">
+                    <img alt="LinkedIn icon" class="filter-color-inactive-link" style="filter: grayscale(100%) invert(100%) contrast(2)" src="/assets/images/linkedin_logo.svg"/>
+                    <img alt="LinkedIn icon" class="filter-color-active-link" src="/assets/images/linkedin_logo.svg"/>
+
+                </div><span class="align-middle d-none d-md-inline-block ml-1">LinkedIn profile</span>
+            </a>
+        </div>
+        <div class="col col-lg-auto text-center text-nowrap navbar-link navbar-text">
+            <a href="/atom.xml">
+                <div class="align-middle fade-image">
+                    <img alt="Atom feed icon" class="filter-color-inactive-link" src="/assets/images/atom_inactive.svg"/>
+                    <img alt="Atom feed icon" class="filter-color-active-link" src="/assets/images/atom.svg"/>
+                </div><span class="align-middle d-none d-md-inline-block ml-1">Atom feed</span>
+            </a>
+        </div>
+    </div>
+</div>
+		<script src="/assets/js/shell.js"></script>
+    </footer>
+</html>
