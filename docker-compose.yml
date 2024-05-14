@@ -1,0 +1,10 @@
+services:
+  github-pages:
+    build: .
+    working_dir: /app
+    volumes:
+      - .git:/app/.git
+    ports:
+      - "4000:4000"
+    command: make
+
