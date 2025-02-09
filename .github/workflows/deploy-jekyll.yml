@@ -3,6 +3,7 @@ name: Build and deploy site to Github Pages
 on:
   push:
     branches: [ gh-pages-deploy ]
+  workflow_dispatch:
 
 env:
     BUILD_DIR: .build
