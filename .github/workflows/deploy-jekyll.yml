@@ -54,4 +54,4 @@ jobs:
     - name: Push to _build
       run: |
         cd ${BUILD_DIR}
-        git push github _build --force
+        git push github HEAD:_build --force
