@@ -16,6 +16,7 @@ categories: cheat-sheet
 ## Shortcuts
 
 ### History
+
 | Command                       | Description                    |
 |:------------------------------|--------------------------------|
 | <kbd>Ctrl</kbd>+<kbd>\_</kbd> | Undo last key press            |
@@ -28,6 +29,7 @@ categories: cheat-sheet
 | <kbd>Alt</kbd>+<kbd>r</kbd>   | Revert any changes to a command you’ve pulled from your history if you’ve edited it. |
 
 ### Navigation
+
 | Command                      | Description                    |
 |:-----------------------------|--------------------------------|
 | <kbd>Ctrl</kbd>+<kbd>a</kbd> | Go to beginning of line        |
@@ -39,27 +41,30 @@ categories: cheat-sheet
 | <kbd>Ctrl</kbd>+<kbd>x</kbd>, <kbd>Ctrl</kbd>+<kbd>x</kbd> | Move between the beginning of the line and the current position of the cursor |
 
 ### Capitalization
+
 | Command  | Description                    |
 |:---------|--------------------------------|
-| <kbd>Alt</kbd>+<kbd>u</kbd>  | Capitalize every character from the cursor to the end of the current word, converting the characters to upper case.| 
-| <kbd>Alt</kbd>+<kbd>l</kbd>  | Uncapitalize every character from the cursor to the end of the current word, converting the characters to lower case.| 
-| <kbd>Alt</kbd>+<kbd>c</kbd>  | Capitalize the character under the cursor. Your cursor will move to the end of the current word.| 
+| <kbd>Alt</kbd>+<kbd>u</kbd>  | Capitalize every character from the cursor to the end of the current word, converting the characters to upper case.|
+| <kbd>Alt</kbd>+<kbd>l</kbd>  | Uncapitalize every character from the cursor to the end of the current word, converting the characters to lower case.|
+| <kbd>Alt</kbd>+<kbd>c</kbd>  | Capitalize the character under the cursor. Your cursor will move to the end of the current word.|
 
 ### Editing
+
 | Command  | Description                    |
 |:---------|--------------------------------|
-| <kbd>Ctrl</kbd>+<kbd>d</kbd>  | Delete the character under the cursor | 
-| <kbd>Alt</kbd>+<kbd>d</kbd>   | Delete the part of the word that starts at (and is after) the cursor | 
-| <kbd>Ctrl</kbd>+<kbd>h</kbd>  | Delete the character before the cursor | 
-| <kbd>Alt</kbd>+<kbd>h</kbd>   | Delete the part of the word that ends at (is before) the cursor | 
+| <kbd>Ctrl</kbd>+<kbd>d</kbd>  | Delete the character under the cursor |
+| <kbd>Alt</kbd>+<kbd>d</kbd>   | Delete the part of the word that starts at (and is after) the cursor |
+| <kbd>Ctrl</kbd>+<kbd>h</kbd>  | Delete the character before the cursor |
+| <kbd>Alt</kbd>+<kbd>h</kbd>   | Delete the part of the word that ends at (is before) the cursor |
 
 ### Cut and paste
+
 | Command  | Description                    |
 |:---------|--------------------------------|
-| <kbd>Ctrl</kbd>+<kbd>w</kbd>  | Cut the word before the cursor, adding it to the clipboard.                    | 
-| <kbd>Ctrl</kbd>+<kbd>k</kbd>  | Cut the part of the line after the cursor, adding it to the clipboard.         | 
-| <kbd>Ctrl</kbd>+<kbd>u</kbd>  | Cut the part of the line before the cursor, adding it to the clipboard.        | 
-| <kbd>Ctrl</kbd>+<kbd>y</kbd>  | Paste the last thing you cut from the clipboard. The y here stands for “yank”. | 
+| <kbd>Ctrl</kbd>+<kbd>w</kbd>  | Cut the word before the cursor, adding it to the clipboard.                    |
+| <kbd>Ctrl</kbd>+<kbd>k</kbd>  | Cut the part of the line after the cursor, adding it to the clipboard.         |
+| <kbd>Ctrl</kbd>+<kbd>u</kbd>  | Cut the part of the line before the cursor, adding it to the clipboard.        |
+| <kbd>Ctrl</kbd>+<kbd>y</kbd>  | Paste the last thing you cut from the clipboard. The y here stands for “yank”. |
 
 # Shortcuts for vi mode (`set -o vi`)
 See [\[3\]](#sources).
