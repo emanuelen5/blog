@@ -3,7 +3,7 @@ services:
     build: .
     working_dir: /app
     volumes:
-      - .git:/app/.git
+      - ./site:/app/site
     ports:
       - "4000:4000"
     command: make serve
