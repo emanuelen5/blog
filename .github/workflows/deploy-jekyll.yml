@@ -39,6 +39,6 @@ jobs:
       run: |
         git config --local user.name "Github action builder"
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        git add --force .build
+        git add --force docs
         git commit -m "Built site from commit $GITHUB_SHA"
         git push origin HEAD:_build --force

@@ -1,5 +1,5 @@
 FLAGS?=
-BUILD_DIR?=.build
+BUILD_DIR?=docs/
 PORT?=4000
 
 init: .install

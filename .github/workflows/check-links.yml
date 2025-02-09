@@ -6,7 +6,7 @@ on:
             - '*'
 
 env:
-    BUILD_DIR: .build
+    BUILD_DIR: docs
 
 jobs:
   htmlproofer:

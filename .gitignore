@@ -1,6 +1,6 @@
 /*.html
 _site/
 .jekyll-*
-.build/
+docs/
 .install
 .bundle/

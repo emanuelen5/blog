@@ -1,6 +1,6 @@
 permalink: /posts/:year-:month-:slug/
 source: site
-destination: .build
+destination: docs
 livereload: true
 url: "https://blog.cedernaes.com"
 repo: "https://github.com/emanuelen5/emanuelen5.github.io/"
