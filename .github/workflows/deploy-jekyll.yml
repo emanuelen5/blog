@@ -41,6 +41,7 @@ jobs:
     - name:
       run: |
         cd ${BUILD_DIR}
+        git config --global init.defaultBranch main
         git init
         git config --local user.name "Github action builder"
         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
@@ -49,8 +50,8 @@ jobs:
         # Set upstream to push to
         git remote add github https://github.com/${GITHUB_REPOSITORY}.git
         git fetch --all
-        git branch -u github/main
-    - name: Push to main
+        git branch -u github/_build
+    - name: Push to _build
       run: |
         cd ${BUILD_DIR}
-        git push github main --force
+        git push github _build --force
