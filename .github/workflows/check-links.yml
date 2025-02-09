@@ -1,12 +1,9 @@
 name: Build site and check links with htmlproofer
 
 on:
-    push:
-        branches:
-            - '*'
-
-env:
-    BUILD_DIR: docs
+  push:
+    branches: [blog]
+  pull_request:
 
 jobs:
   htmlproofer:
