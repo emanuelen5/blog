@@ -1,7 +1,9 @@
 FROM ruby:latest
 WORKDIR /app
 
-COPY . .
+COPY Gemfile Gemfile.lock ./
 RUN gem install bundler
-RUN make
+COPY Makefile _config.yml ./
+COPY site ./site
+RUN make init
 

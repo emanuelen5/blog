@@ -6,5 +6,5 @@ services:
       - .git:/app/.git
     ports:
       - "4000:4000"
-    command: make
+    command: make serve
 
