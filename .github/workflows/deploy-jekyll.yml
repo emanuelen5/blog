@@ -48,11 +48,8 @@ jobs:
         # Set upstream to push to
         git remote add github https://github.com/${GITHUB_REPOSITORY}.git
         git fetch --all
-        git branch -u github/master
-    - name: Push to master
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: master
-        force: true
-        directory: ${{ env.BUILD_DIR }}
+        git branch -u github/main
+    - name: Push to main
+      run: |
+        cd ${BUILD_DIR}
+        git push github main --force
