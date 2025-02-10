@@ -11,7 +11,7 @@ sortindex: 2
 <div class="card my-3" id="{{p.id}}">
 	<div class="card-body px-sm-3 px-1 py-1">
 		<h5 class="card-title my-0">
-			<a href="{{p.url}}">
+			<a class="stretched-link" href="{{p.url}}">
 				{%- if p.thumbnail -%}
 				<span style="width:1.5em; text-align:center; display: inline-block; overflow: hidden;"><img style="height:1em;" alt="Post thumbnail" src="{{p.thumbnail}}"/></span>
 				{%- endif -%}
