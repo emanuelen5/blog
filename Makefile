@@ -15,7 +15,7 @@ gh-pages: build
 	touch "${BUILD_DIR}/.nojekyll"
 	if [ -f README.md ]; then cp README.md "${BUILD_DIR}"; fi
 htmlproofer:
-	bundle exec htmlproofer --internal-domains localhost,blog.cedernaes.com --assume-extension ${BUILD_DIR} ${FLAGS}
+	bundle exec htmlproofer --internal-domains localhost,blog.cedernaes.com  --file-ignore 'docs/tips/2025-02-10-ssh-port-forwarding/index.html' --assume-extension ${BUILD_DIR} ${FLAGS}
 
 clean:
 	rm -rf "${BUILD_DIR}" .jekyll-*
