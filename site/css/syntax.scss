@@ -1,11 +1,12 @@
 ---
 ---
 
+@use "sass:meta";
 :not([data-theme="dark"]) {
-    @import "syntax-light.scss";
+    @include meta.load-css("syntax-light.scss");
 }
 
 
 [data-theme="dark"] {
-    @import "syntax-dark.scss";
+    @include meta.load-css("syntax-dark.scss");
 }
