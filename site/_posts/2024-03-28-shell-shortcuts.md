@@ -19,7 +19,7 @@ categories: cheat-sheet
 
 | Command                       | Description                    |
 |:------------------------------|--------------------------------|
-| <kbd>Ctrl</kbd>+<kbd>\_</kbd> | Undo last key press            |
+| <kbd>Ctrl</kbd>+<kbd>_</kbd>  | Undo last key press            |
 | <kbd>Alt</kbd>+<kbd><</kbd>   | Go to start of history         |
 | <kbd>Alt</kbd>+<kbd>></kbd>   | Go to end of history (current) |
 | <kbd>Ctrl</kbd>+<kbd>r</kbd>  | Search backwards in history    |
