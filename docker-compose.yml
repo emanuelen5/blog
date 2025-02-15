@@ -4,8 +4,10 @@ services:
     working_dir: /app
     volumes:
       - ./site:/app/site
+      - ./Gemfile:/app/Gemfile
+      - ./Gemfile.lock:/app/Gemfile.lock
     ports:
       - "4000:4000"
       - "35729:35729"
-    command: make serve
+    command: jekyll serve -H '*' -P 4000 --watch --drafts --force_polling --livereload
 
