@@ -9,5 +9,5 @@ services:
     ports:
       - "4000:4000"
       - "35729:35729"
-    command: jekyll serve -H '0.0.0.0' -P 4000 --watch --drafts --force_polling --livereload
+    command: jekyll serve -H '0.0.0.0' -P 4000 --watch --drafts --livereload
 
