@@ -56,7 +56,6 @@ div.jumbotron-post {
 
 .jumbotron-post-text {
 	text-shadow: 0 0 2px white;
-	text-stroke-width: 3px;
 
 	a > img {
 		height: 1em;
@@ -139,13 +138,6 @@ blockquote {
 	}
 }
 
-.anchor {
-	>span {
-		letter-spacing: -0.3em;
-		margin-right: 0.3em;
-	}
-}
-
 // Color special links on hover
 // (Several layers of links that are revealed/hidden on hover, see footer_links.html)
 a {
@@ -192,10 +184,13 @@ a {
 
 
 // Dark mode specific styling
-[data-theme="dark"] {
+[data-bs-theme="dark"] {
 	$footer-color:#201f1c;
 	$text-color: rgb(198, 188, 183);
 	$light-text-color: rgb(96, 90, 88);
+	--bs-body-bg: #111 !important;
+	--bs-tertiary-bg: rgb(32, 31, 28) !important;
+	--bs-tertiary-bg-rgb: 32, 31, 28 !important;
 
 	.show-when-light {
 		display: none;
@@ -213,34 +208,12 @@ a {
 			opacity: 0;
 		}
 	}
-	nav.navbar-dark {
-		background-color: $footer-color !important;
-	}
-	.bg-light {
-		background-color: $footer-color !important;
-	}
-	.navbar-light {
-		.navbar-brand {
-			color: $light-text-color;
-			&:hover {
-				color: $light-text-color;
-			}
-		}
-
-		.navbar-text a {
-			color: $light-text-color;
-			&:hover {
-				color: $text-color;
-			}
-		}
-	}
 
 	background-color: #111 !important;
 	color: $text-color;
 
-	a {
-		color: #2786ec;
-	}
+	--bs-body-color: $text-color !important;
+	--bs-heading-color: $text-color !important;
 
 	.card-title a {
 		color: $text-color;
@@ -249,6 +222,13 @@ a {
 		}
 	}
 
+	.bg-dark, .btn-dark {
+		background-color: rgb(52, 58, 64) !important;
+	}
+	.bg-info, .btn-info {
+		background-color: #2b7d8b !important;
+		border-color: #2b7d8b !important;
+	}
 	.bg-white {
 		background-color: #000 !important;
 	}

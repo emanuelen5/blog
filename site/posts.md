@@ -7,28 +7,29 @@ sortindex: 1
 ---
 
 <div class="mb-2 small">
-	<button class="btn btn-block py-0" collapsing-target="#filters">
-		<div class="row">
-			<div class="col-auto pl-1">
-				Filters
+	<div class="d-grid">
+		<button class="btn btn-outline-secondary" collapsing-target="#filters">
+			<div class="row px-2">
+				<div class="col-auto me-auto">
+					Filters
+				</div>
+				<div class="col-auto">
+					⥍ <!-- Up/down arrow symbol -->
+				</div>
 			</div>
-			<div class="col"></div>
-			<div class="col-auto pr-1">
-				⥍ <!-- Up/down arrow symbol -->
-			</div>
-		</div>
-	</button>
+		</button>
+	</div>
 	<div class="collapsing" id="filters">
-		<div class="row no-gutters justify-content-center">
+		<div class="row g-0 justify-content-center">
 			{%- include tags_n_categories.html -%}
 			{%- assign tags = tags | sort_natural -%}
 			{%- assign categories = categories | sort_natural -%}
 
 			{%- for tag in tags -%}
-				<div class="col-auto"><button class="btn badge badge-dark tag mini-margin">{{tag}}</button></div>
+				<div class="col-auto"><button class="btn btn-dark badge bg-dark tag mini-margin">{{tag}}</button></div>
 			{%- endfor -%}
 			{%- for category in categories -%}
-				<div class="col-auto"><button class="btn badge badge-info category mini-margin">{{category}}</button></div>
+				<div class="col-auto"><button class="btn btn-info badge bg-info category mini-margin">{{category}}</button></div>
 			{%- endfor -%}
 		</div>
 		<div class="mb-2"></div>
@@ -47,17 +48,17 @@ sortindex: 1
 			<div>
 				{%- if p.draft == true -%}
 				<span>
-					<div class="badge badge-warning">DRAFT</div>
+					<div class="badge btn-warning bg-warning">DRAFT</div>
 				</span>
 				{%- endif -%}
 				<span class="tags">
 				{%- for t in p.tags -%}
-					<button class="btn badge badge-dark tag">{{t}}</button>
+					<button class="btn btn-dark badge bg-dark tag">{{t}}</button>
 				{%- endfor -%}
 				</span>
 				<span class="categories">
 				{%- for c in p.categories -%}
-					<button class="btn badge badge-info category">{{c}}</button>
+					<button class="btn btn-info badge bg-info category">{{c}}</button>
 				{%- endfor -%}
 				</span>
 			</div>

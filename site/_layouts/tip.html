@@ -11,12 +11,16 @@ layout: default
 Last updated: {{ page.git-last-modified-date | date: "%F %R" }}</p>
 {% endcomment %}
 
-<div class="row no-gutters justify-content-center justify-content-md-start">
+<div class="row g-0 justify-content-center justify-content-md-start">
 	{%- for tag in page.tags -%}
-		<div class="col-auto"><div class="badge badge-dark tag mini-margin">{{tag}}</div></div>
+		<div class="col-auto">
+			<div class="badge bg-dark tag mini-margin">{{tag}}</div>
+		</div>
 	{%- endfor -%}
 	{%- for category in page.categories -%}
-		<div class="col-auto"><div class="badge badge-info category mini-margin">{{category}}</div></div>
+		<div class="col-auto">
+			<div class="badge bg-info category mini-margin">{{category}}</div>
+		</div>
 	{%- endfor -%}
 </div>
 

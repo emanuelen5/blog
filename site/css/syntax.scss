@@ -2,11 +2,11 @@
 ---
 
 @use "sass:meta";
-:not([data-theme="dark"]) {
+:not([data-bs-theme="dark"]) {
     @include meta.load-css("syntax-light.scss");
 }
 
 
-[data-theme="dark"] {
+[data-bs-theme="dark"] {
     @include meta.load-css("syntax-dark.scss");
 }

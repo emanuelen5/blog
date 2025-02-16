@@ -23,17 +23,17 @@ Recipes are in 🇸🇪 Swedish!
 			<div class="d-inline-block">
 				{%- if p.draft == true -%}
 				<span>
-					<div class="badge badge-warning">DRAFT</div>
+					<div class="badge bg-warning">DRAFT</div>
 				</span>
 				{%- endif -%}
 				<span class="tags">
 				{%- for t in p.tags -%}
-					<button class="btn badge badge-dark tag">{{t}}</button>
+					<button class="btn badge bg-dark tag">{{t}}</button>
 				{%- endfor -%}
 				</span>
 				<span class="categories">
 				{%- for c in p.categories -%}
-					<button class="btn badge badge-info category">{{c}}</button>
+					<button class="btn badge bg-info category">{{c}}</button>
 				{%- endfor -%}
 				</span>
 			</div>

@@ -15,8 +15,8 @@ window.addEventListener("load", function () {
 
 function drawTheme(darkThemeSelected) {
   darkThemeSelected
-    ? document.body.setAttribute("data-theme", "dark")
-    : document.body.removeAttribute("data-theme");
+    ? document.documentElement.setAttribute("data-bs-theme", "dark")
+    : document.documentElement.removeAttribute("data-bs-theme");
 }
 
 /**
@@ -32,7 +32,7 @@ function drawTheme(darkThemeSelected) {
  */
 function initTheme() {
   var darkThemeSelected =
-    (localStorage.getItem("darkSwitch") === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) || 
+    (localStorage.getItem("darkSwitch") === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
     (localStorage.getItem("darkSwitch") !== null && localStorage.getItem("darkSwitch") === "dark");
   darkSwitch.checked = darkThemeSelected;
   drawTheme(darkThemeSelected);
